@@ -4,6 +4,7 @@ import com.semicolon.africa.data.models.ArtWork;
 import com.semicolon.africa.data.repositories.ArtWorkRepository;
 import com.semicolon.africa.dtos.requests.ArtWorkRequest;
 import com.semicolon.africa.dtos.response.ArtWorkResponse;
+import com.semicolon.africa.exceptions.ArtWorkNotUpdatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class ArtWorkServiceImpl implements ArtWorkService {
     private ArtWorkRepository artWorkRepository;
 
     @Override
- public ArtWorkResponse create_Artwork(ArtWorkRequest request){
+ public ArtWorkResponse createArtwork(ArtWorkRequest request){
         ArtWork art = new ArtWork();
         art.setId(request.getId());
         art.setDescription(request.getDescription());
@@ -41,7 +42,6 @@ public class ArtWorkServiceImpl implements ArtWorkService {
             artWork.setPrice(request.getPrice());
             artWork.setImageUrl(request.getImageUrl());
             artWork.setSold(request.isSold());
-            artWork.setSold(request.isSold());
 //            System.out.println("Not sold" +  request.isSold());
         }
         ArtWorkResponse response = new ArtWorkResponse();
@@ -49,8 +49,49 @@ public class ArtWorkServiceImpl implements ArtWorkService {
         return response;
     }
 
-//    @Override
-//    public ArtWorkResponse update_artWork(){
-//
-//    }
+    @Override
+    public ArtWorkResponse updateArtWork(ArtWorkRequest request) {
+
+        ArtWork art = artWorkRepository.findById(request.getId())
+                .orElseThrow(() -> new ArtWorkNotUpdatedException("Artwork not found"));
+
+        art.setDescription(request.getDescription());
+        art.setCategory(request.getCategory());
+        art.setPrice(request.getPrice());
+        art.setImageUrl(request.getImageUrl());
+
+        artWorkRepository.save(art);
+
+        ArtWorkResponse response = new ArtWorkResponse();
+        response.setMessage("Artwork has been updated successfully");
+        return response;
+    }
+
+@Override
+ public ArtWorkResponse markAsSold(ArtWorkRequest request) {
+        ArtWork art = artWorkRepository.findById(request.getId())
+                .orElseThrow(() -> new ArtWorkNotUpdatedException("Artwork not found"));
+    if(!art.isSold()){
+        art.setSold(true);
+        artWorkRepository.save(art);
+    }else {
+        throw new ArtWorkNotUpdatedException("Artwork is already sold");
+    }
+        ArtWorkResponse response = new ArtWorkResponse();
+        response.setMessage("Artwork has been sold successfully");
+        return response;
+
+}
+@Override
+  public ArtWorkResponse deleteArtWork(Long id){
+        ArtWork art = artWorkRepository.findById(id)
+                .orElseThrow(() -> new ArtWorkNotUpdatedException("Artwork not found"));
+        artWorkRepository.delete(art);
+
+        ArtWorkResponse response = new ArtWorkResponse();
+        response.setMessage("Artwork has been deleted successfully");
+        return response;
+}
+
+
 }

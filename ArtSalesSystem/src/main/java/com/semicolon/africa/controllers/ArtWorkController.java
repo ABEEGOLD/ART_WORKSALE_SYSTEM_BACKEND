@@ -16,7 +16,7 @@ public class ArtWorkController {
 
     @PostMapping("/create")
     public ResponseEntity<ArtWorkResponse> create_Artwork(@RequestBody ArtWorkRequest request){
-        return ResponseEntity.ok(artWorkService.create_Artwork(request));
+        return ResponseEntity.ok(artWorkService.createArtwork(request));
       }
 
 //    @GetMapping("/hello")
