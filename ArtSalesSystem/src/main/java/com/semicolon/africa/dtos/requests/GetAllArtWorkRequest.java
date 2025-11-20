@@ -5,12 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ArtWorkRequest {
+public class GetAllArtWorkRequest {
     private Long id;
-    private String title;
     private String description;
-    private int price;
+    private String title;
     private String imageUrl;
-    private boolean sold = false;
+    private String price;
 
 }

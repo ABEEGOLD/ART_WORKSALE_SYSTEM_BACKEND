@@ -7,14 +7,17 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class User {
+public class Artist {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String email;
-    private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.BUYER;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private String bio;
+    private String website;
+    private String profileImageUrl;
 }

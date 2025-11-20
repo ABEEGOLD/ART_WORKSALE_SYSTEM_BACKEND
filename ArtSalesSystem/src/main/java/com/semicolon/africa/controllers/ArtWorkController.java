@@ -1,7 +1,7 @@
 package com.semicolon.africa.controllers;
 
-import com.semicolon.africa.dtos.requests.ArtWorkRequest;
-import com.semicolon.africa.dtos.response.ArtWorkResponse;
+import com.semicolon.africa.dtos.requests.CreateArtWorkRequest;
+import com.semicolon.africa.dtos.response.CreateArtWorkResponse;
 import com.semicolon.africa.services.ArtWorkServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ public class ArtWorkController {
     private ArtWorkServiceImpl artWorkService;
 
     @PostMapping("/create")
-    public ResponseEntity<ArtWorkResponse> create_Artwork(@RequestBody ArtWorkRequest request){
+    public ResponseEntity<CreateArtWorkResponse> create_Artwork(@RequestBody CreateArtWorkRequest request){
         return ResponseEntity.ok(artWorkService.createArtwork(request));
       }
 
