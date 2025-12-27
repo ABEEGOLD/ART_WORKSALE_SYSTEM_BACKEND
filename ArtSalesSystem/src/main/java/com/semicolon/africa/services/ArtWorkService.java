@@ -1,7 +1,7 @@
 package com.semicolon.africa.services;
 
-import com.semicolon.africa.dtos.requests.*;
-import com.semicolon.africa.dtos.response.*;
+import com.semicolon.africa.dtos.requestsArtWork.*;
+import com.semicolon.africa.dtos.responseArtWork.*;
 
 import java.util.List;
 

@@ -24,8 +24,7 @@ public class ArtWork {
     private LocalDateTime createdDate = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "artist_id")
-    private Artist artist;
+    private User artist;
 
 
 //    @Override

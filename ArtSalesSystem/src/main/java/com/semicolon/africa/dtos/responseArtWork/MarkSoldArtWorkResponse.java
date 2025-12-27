@@ -1,8 +1,7 @@
-package com.semicolon.africa.dtos.response;
+package com.semicolon.africa.dtos.responseArtWork;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.aspectj.bridge.IMessage;
 
 @Getter
 @Setter

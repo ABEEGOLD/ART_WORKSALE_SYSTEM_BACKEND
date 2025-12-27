@@ -3,12 +3,14 @@ package com.semicolon.africa.services;
 import com.semicolon.africa.data.models.ArtWork;
 import com.semicolon.africa.data.models.Artist;
 import com.semicolon.africa.data.models.StatusArtwork;
+import com.semicolon.africa.data.models.User;
 import com.semicolon.africa.data.repositories.ArtWorkRepository;
 import com.semicolon.africa.data.repositories.ArtistRepository;
-import com.semicolon.africa.dtos.requests.*;
-import com.semicolon.africa.dtos.response.*;
+import com.semicolon.africa.dtos.requestsArtWork.*;
+import com.semicolon.africa.dtos.responseArtWork.*;
 import com.semicolon.africa.exceptions.ArtWorkNotUpdatedException;
 import com.semicolon.africa.exceptions.ArtistNotFoundException;
+import com.semicolon.africa.exceptions.ArtworkNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +43,7 @@ public class ArtWorkServiceImpl implements ArtWorkService {
         art.setPrice(request.getPrice());
         art.setImageUrl("Upload.xml");
         art.setStatus(StatusArtwork.AVAILABLE);
-        art.setArtist(artist);
+        art.setArtist(artist.getUser());
 
 
         ArtWork saved = artWorkRepository.save(art);
@@ -94,7 +96,7 @@ public class ArtWorkServiceImpl implements ArtWorkService {
 @Override
  public MarkSoldArtWorkResponse markAsSold(MarkSoldArtWorkRequest request) {
         ArtWork art = artWorkRepository.findById(request.getId())
-                .orElseThrow(() -> new ArtWorkNotUpdatedException("Artwork not found"));
+                .orElseThrow(() -> new ArtworkNotFoundException("Artwork not found"));
     if(!art.getStatus().equals(StatusArtwork.SOLD)){
         art.setStatus(StatusArtwork.SOLD);
         artWorkRepository.save(art);
@@ -102,14 +104,14 @@ public class ArtWorkServiceImpl implements ArtWorkService {
         throw new ArtWorkNotUpdatedException("Artwork is already sold");
     }
     MarkSoldArtWorkResponse response = new MarkSoldArtWorkResponse();
-        response.setMessage("Artwork has been sold successfully");
+        response.setMessage("Artwork has been marked as sold successfully");
         return response;
 
 }
 @Override
   public DeleteArtWorkResponse deleteArtWork(Long id){
         ArtWork art = artWorkRepository.findById(id)
-                .orElseThrow(() -> new ArtWorkNotUpdatedException("Artwork not found"));
+                .orElseThrow(() -> new ArtworkNotFoundException("Artwork not found"));
         artWorkRepository.delete(art);
 
         DeleteArtWorkResponse response = new DeleteArtWorkResponse();

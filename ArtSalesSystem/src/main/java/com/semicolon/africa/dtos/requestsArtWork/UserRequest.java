@@ -1,4 +1,4 @@
-package com.semicolon.africa.dtos.requests;
+package com.semicolon.africa.dtos.requestsArtWork;
 
 import lombok.Getter;
 import lombok.Setter;

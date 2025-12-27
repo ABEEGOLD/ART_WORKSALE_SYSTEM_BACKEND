@@ -1,9 +1,7 @@
 package com.semicolon.africa.data.models;
 
-public enum Status {
-    PENDING,
+public enum PurchaseStatus {
     COMPLETED,
-    CANCELLED,
-    PAID,
-
+    FAILED,
+    PENDING
 }

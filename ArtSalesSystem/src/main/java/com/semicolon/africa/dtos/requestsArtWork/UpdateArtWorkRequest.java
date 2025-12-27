@@ -1,6 +1,4 @@
-package com.semicolon.africa.dtos.requests;
-
-import jakarta.persistence.Column;
+package com.semicolon.africa.dtos.requestsArtWork;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,16 +8,15 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-
 @Getter
 @Setter
-public class CreateArtWorkRequest {
+public class UpdateArtWorkRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long artistId;
+    private Long id;
     private String title;
-    @Column(length = 1000)
     private String description;
+    private String imageUrl;
     private BigDecimal price;
 
 

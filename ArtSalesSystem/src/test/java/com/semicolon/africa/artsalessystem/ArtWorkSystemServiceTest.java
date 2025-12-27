@@ -4,11 +4,10 @@ import com.semicolon.africa.data.models.*;
 import com.semicolon.africa.data.repositories.ArtWorkRepository;
 import com.semicolon.africa.data.repositories.ArtistRepository;
 import com.semicolon.africa.data.repositories.UserRepository;
-import com.semicolon.africa.dtos.requests.CreateArtWorkRequest;
-import com.semicolon.africa.dtos.requests.UpdateArtWorkRequest;
-import com.semicolon.africa.dtos.response.CreateArtWorkResponse;
-import com.semicolon.africa.dtos.response.GetAllArtWorkResponse;
-import com.semicolon.africa.dtos.response.UpdateArtWorkResponse;
+import com.semicolon.africa.dtos.requestsArtWork.CreateArtWorkRequest;
+import com.semicolon.africa.dtos.requestsArtWork.MarkSoldArtWorkRequest;
+import com.semicolon.africa.dtos.requestsArtWork.UpdateArtWorkRequest;
+import com.semicolon.africa.dtos.responseArtWork.*;
 import com.semicolon.africa.services.ArtWorkService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import java.util.List;
 
 import static com.semicolon.africa.data.models.Role.ARTIST;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt.isEqualTo;
 
 @SpringBootTest
 public class ArtWorkSystemServiceTest {
@@ -105,6 +105,43 @@ public class ArtWorkSystemServiceTest {
 
     @Test
     public void testThatArtWorkIsMarkAsSold(){
+        ArtWork artWork = new ArtWork();
+        artWork.setPrice(new BigDecimal("2000"));
+        artWork.setStatus(StatusArtwork.AVAILABLE);
+        artWork.setTitle("Furniture1");
+        artWork.setDescription("The Paint Of a Sky");
+        artWork.setImageUrl("https://www.furniture.com/images/furniture.jpg");
+        ArtWork saved = artWorkRepository.save(artWork);
+
+        MarkSoldArtWorkRequest markSoldRequest = new MarkSoldArtWorkRequest();
+        markSoldRequest.setId(saved.getId());
+        markSoldRequest.setStatusArtwork(StatusArtwork.SOLD);
+        markSoldRequest.setTitle("Furniture1");
+        markSoldRequest.setDescription("The Paint Of a Sky");
+
+        MarkSoldArtWorkResponse markSoldResponse = artWorkService.markAsSold(markSoldRequest);
+        assertThat(markSoldResponse).isNotNull();
+        assertThat(markSoldResponse.getMessage()).isEqualTo("Artwork has been marked as sold successfully");
+    }
+
+    @Test
+    public void testThatArtWorkCanBeDeleted(){
+        ArtWork artWork = new ArtWork();
+        artWork.setPrice(new BigDecimal("2000"));
+        artWork.setStatus(StatusArtwork.AVAILABLE);
+        artWork.setTitle("Furniture1");
+        artWork.setDescription("TThe Paint Of a Sky");
+        artWork.setImageUrl("https://www.cosmetics.com/images/furniture.jpg");
+        ArtWork saved = artWorkRepository.save(artWork);
+
+        DeleteArtWorkResponse deleteResponse = artWorkService.deleteArtWork(saved.getId());
+
+        assertThat(deleteResponse).isNotNull();
+        assertThat(deleteResponse.getMessage()).isEqualTo("Artwork has been deleted successfully");
+
+        assertThat(artWorkRepository.findById(saved.getId())).isEmpty();
+
+
 
     }
 

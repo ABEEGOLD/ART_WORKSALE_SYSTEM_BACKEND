@@ -1,7 +1,7 @@
 package com.semicolon.africa.controllers;
 
-import com.semicolon.africa.dtos.requests.CreateArtWorkRequest;
-import com.semicolon.africa.dtos.response.CreateArtWorkResponse;
+import com.semicolon.africa.dtos.requestsArtWork.CreateArtWorkRequest;
+import com.semicolon.africa.dtos.responseArtWork.CreateArtWorkResponse;
 import com.semicolon.africa.services.ArtWorkServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
