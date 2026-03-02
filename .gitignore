@@ -1,0 +1,16 @@
+nano .gitignore
+# IntelliJ
+.idea/
+
+# Logs
+*.log
+
+# Build folders
+target/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
