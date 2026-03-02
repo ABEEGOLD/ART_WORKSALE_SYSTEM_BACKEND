@@ -16,5 +16,5 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.BUYER;
+    private Role role;
 }

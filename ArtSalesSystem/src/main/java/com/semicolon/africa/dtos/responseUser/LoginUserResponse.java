@@ -1,9 +1,9 @@
 package com.semicolon.africa.dtos.responseUser;
 
+import com.semicolon.africa.data.models.Role;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.management.relation.Role;
 
 @Getter
 @Setter

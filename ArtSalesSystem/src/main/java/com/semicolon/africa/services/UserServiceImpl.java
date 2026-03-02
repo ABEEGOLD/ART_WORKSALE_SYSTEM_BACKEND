@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
         LoginUserResponse response = new LoginUserResponse();
         response.setMessage("User login successful");
-        response.setRole(response.getRole());
+        response.setRole(user.getRole());
         response.setName(user.getName());
         return response;
     }
@@ -75,6 +75,8 @@ public class UserServiceImpl implements UserService {
 
         UserProfileResponse response = new UserProfileResponse();
         response.setName(user.getName());
+        System.out.println("User name from DB: " + user.getName());
+
         response.setEmail(user.getEmail());
         response.setProfilePictureUrl("photo.jpg");
         response.setMessage("User profile retrieved successfully");

@@ -7,4 +7,6 @@ import lombok.Setter;
 @Setter
 public class UserProfileRequest {
     private Long userId;
+    private String name;
+    private String email;
 }

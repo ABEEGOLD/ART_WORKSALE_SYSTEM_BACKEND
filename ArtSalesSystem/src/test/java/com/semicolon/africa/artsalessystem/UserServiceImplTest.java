@@ -5,18 +5,18 @@ import com.semicolon.africa.data.models.User;
 import com.semicolon.africa.data.repositories.UserRepository;
 import com.semicolon.africa.dtos.requestUser.LoginUserRequest;
 import com.semicolon.africa.dtos.requestUser.RegisterUserRequest;
+import com.semicolon.africa.dtos.requestUser.UserProfileRequest;
 import com.semicolon.africa.dtos.responseUser.LoginUserResponse;
 import com.semicolon.africa.dtos.responseUser.RegisterUserResponse;
+import com.semicolon.africa.dtos.responseUser.UserProfileResponse;
 import com.semicolon.africa.services.UserService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class UserServiceImplTest {
@@ -28,6 +28,10 @@ public class UserServiceImplTest {
     @Autowired
     private UserRepository userRepository;
 
+    @AfterEach
+    void setUp() {
+        userRepository.deleteAll();
+    }
 
 
 
@@ -62,13 +66,30 @@ public class UserServiceImplTest {
 
       assertThat(loginResponse).isNotNull();
       assertThat(loginResponse.getMessage()).isEqualTo("User login successful");
-      assertThat(loginResponse.getRole());
+      assertThat(loginResponse.getRole()).isEqualTo(Role.BUYER);
       assertThat(loginResponse.getName()).isEqualTo("John Wick");
 
   }
 
   @Test
-    public void testThatUserCanBeLogout(){
+    public void testThatUserCanGetUserProfile(){
+      User user = new User();
+      user.setName("John Wick");
+      user.setEmail("john@gmail.com");
+      user.setPassword("password");
+      user.setRole(Role.BUYER);
+
+      user = userRepository.save(user);
+
+      UserProfileRequest userProfileRequest = new UserProfileRequest();
+      userProfileRequest.setUserId(user.getId());
+
+      UserProfileResponse userProfileResponse = userService.getUserProfile(userProfileRequest);
+      assertThat(userProfileResponse).isNotNull();
+      assertThat(userProfileResponse.getMessage()).isEqualTo("User profile retrieved successfully");
+      assertThat(userProfileResponse.getName()).isEqualTo("John Wick");
+      assertThat(userProfileResponse.getEmail()).isEqualTo("john@gmail.com");
+      assertThat(userProfileResponse.getProfilePictureUrl()).isEqualTo("photo.jpg");
 
     }
 }
