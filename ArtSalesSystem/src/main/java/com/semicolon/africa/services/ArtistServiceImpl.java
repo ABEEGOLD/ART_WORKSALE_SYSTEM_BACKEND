@@ -1,10 +1,14 @@
 package com.semicolon.africa.services;
 
 import com.semicolon.africa.data.models.ArtWork;
+import com.semicolon.africa.data.models.Artist;
+import com.semicolon.africa.data.models.User;
 import com.semicolon.africa.data.repositories.ArtWorkRepository;
 import com.semicolon.africa.data.repositories.ArtistRepository;
+import com.semicolon.africa.data.repositories.UserRepository;
 import com.semicolon.africa.dtos.requestArtist.RequestArtist;
 import com.semicolon.africa.dtos.respondArtist.RespondArtist;
+import com.semicolon.africa.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +22,26 @@ public class ArtistServiceImpl implements ArtistService{
     @Autowired
     private ArtWorkRepository artWorkRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public RespondArtist registerArtist(RequestArtist requestArtist) {
-        return null;
+        User user = userRepository.findById(requestArtist.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + requestArtist.getUserId()));
+
+        Artist artist = new Artist();
+        artist.setUser(user);
+        artist.setBio(requestArtist.getBio());
+        artist.setWebsite(requestArtist.getWebsite());
+        artist.setProfileImageUrl(requestArtist.getProfileImageUrl());
+
+        Artist savedArtist = artistRepository.save(artist);
+
+        RespondArtist response = new RespondArtist();
+        response.setMessage("Artist registered successfully");
+        response.setArtist(savedArtist);
+        return response;
     }
 
     @Override
