@@ -12,7 +12,7 @@ public interface ArtistService {
     RespondArtist getArtistById(Long id);
     List<RespondArtist> getAllArtists();
     RespondArtist updateArtist(Long id, RequestArtist requestArtist);
-    void deleteArtist(Long id);
+    RespondArtist deleteArtist(Long id);
     List<ArtWork> getArtworksByArtist(Long artistId);
 
 }

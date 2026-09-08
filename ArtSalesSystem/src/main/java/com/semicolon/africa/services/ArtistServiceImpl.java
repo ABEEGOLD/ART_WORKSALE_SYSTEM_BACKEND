@@ -72,17 +72,41 @@ public class ArtistServiceImpl implements ArtistService{
 
     @Override
     public RespondArtist updateArtist(Long id, RequestArtist requestArtist) {
-        return null;
+            Artist artist = artistRepository.findById(id)
+                    .orElseThrow(() -> new UserNotFoundException("Artist not found with id: " + id));
+
+        if (requestArtist.getBio() != null) artist.setBio(requestArtist.getBio());
+        artist.setProfileImageUrl(requestArtist.getProfileImageUrl());
+        artist.setWebsite(requestArtist.getWebsite());
+
+            Artist savedArtist = artistRepository.save(artist);
+
+            RespondArtist response = new RespondArtist();
+            response.setMessage("Artist updated successfully");
+            response.setArtist(savedArtist);
+            return response;
+
+
     }
 
     @Override
-    public void deleteArtist(Long id) {
+    public RespondArtist deleteArtist(Long id) {
+        Artist artist = artistRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Artist not found with id: " + id));
 
+        artistRepository.delete(artist);
+
+        RespondArtist response = new RespondArtist();
+        response.setMessage("Artist deleted successfully");
+        return response;
     }
 
     @Override
     public List<ArtWork> getArtworksByArtist(Long artistId) {
-        return List.of();
+        Artist artist = artistRepository.findById(artistId)
+                .orElseThrow(() -> new UserNotFoundException("Artist not found with id: " + artistId));
+
+        return artWorkRepository.findByCreatorId(artist.getUser().getId());
     }
 
 

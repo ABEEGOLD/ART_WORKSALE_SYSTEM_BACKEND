@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ArtWorkRepository extends JpaRepository<ArtWork,Long> {
 
-    List<ArtWork> findByArtistId(Long id);
+    List<ArtWork> findByCreatorId(Long id);
 
 }

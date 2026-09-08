@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
-    private  UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private ArtistRepository artistRepository;
     @Autowired
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private PurchaseRepository purchaseRepository;
 
     @Override
-    public RegisterUserResponse registerUser(RegisterUserRequest request)  {
+    public RegisterUserResponse registerUser(RegisterUserRequest request) {
         if (userRepository.findUsersByEmail(request.getEmail()) != null) {
             throw new UserAlreadyExistsException("Email already exists");
         }
@@ -48,12 +48,11 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
-
     @Override
-    public LoginUserResponse loginUser(LoginUserRequest requestLogin)  {
+    public LoginUserResponse loginUser(LoginUserRequest requestLogin) {
 
         User user = userRepository.findUsersByEmail(requestLogin.getEmail());
-        if(user == null){
+        if (user == null) {
             throw new UserNotFoundException("Invalid email or password");
         }
 
@@ -75,8 +74,6 @@ public class UserServiceImpl implements UserService {
 
         UserProfileResponse response = new UserProfileResponse();
         response.setName(user.getName());
-        System.out.println("User name from DB: " + user.getName());
-
         response.setEmail(user.getEmail());
         response.setProfilePictureUrl("photo.jpg");
         response.setMessage("User profile retrieved successfully");
@@ -85,13 +82,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ChangePasswordResponse changePassword(ChangePasswordRequest passwordRequest){
+    public ChangePasswordResponse changePassword(ChangePasswordRequest passwordRequest) {
         User user = userRepository.findById(passwordRequest.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (!passwordEncoder.matches(passwordRequest.getOldPassword(), user.getPassword())) {
             throw new UserUpdateOldPasswordException("Invalid old password");
-
         }
 
         user.setPassword(passwordEncoder.encode(passwordRequest.getNewPassword()));
@@ -100,18 +96,17 @@ public class UserServiceImpl implements UserService {
         ChangePasswordResponse response = new ChangePasswordResponse();
         response.setMessage("Password changed successfully");
         return response;
-
     }
 
     @Override
-    public GetUserAllArtWorksResponse getUserArtworks(GetUserAllArtWorksRequest requestGet){
+    public GetUserAllArtWorksResponse getUserArtworks(GetUserAllArtWorksRequest requestGet) {
         userRepository.findById(requestGet.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Artist artist = artistRepository.findByUserId(requestGet.getUserId())
                 .orElseThrow(() -> new ArtistNotFoundException("Artist not found"));
 
-        List<ArtWork> artworks = artWorkRepository.findByArtistId(artist.getId());
+        List<ArtWork> artworks = artWorkRepository.findByCreatorId(artist.getUser().getId());
 
         GetUserAllArtWorksResponse response = new GetUserAllArtWorksResponse();
         response.setMessage("All User Artwork Retrieved Successfully");
@@ -131,14 +126,13 @@ public class UserServiceImpl implements UserService {
             throw new ArtworkNotAvailableException("Artwork already been purchased");
         }
 
-        if (artwork.getArtist().getId().equals(buyer.getId())) {
+        if (artwork.getCreator().getId().equals(buyer.getId())) {
             throw new UserNotAllowedException("You cannot buy your own artwork");
         }
 
         if (!buyer.getRole().equals(Role.BUYER)) {
             throw new UserNotAllowedException("Only users can purchase artwork");
         }
-
 
         artwork.setStatus(StatusArtwork.SOLD);
         artWorkRepository.save(artwork);
@@ -163,7 +157,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DeleteUserResponse deleteUser(DeleteUserRequest delete){
+    public DeleteUserResponse deleteUser(DeleteUserRequest delete) {
         User user = userRepository.findById(delete.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
@@ -173,9 +167,8 @@ public class UserServiceImpl implements UserService {
         response.setMessage("User deleted Successfully");
 
         return response;
-
     }
-
+}
 
 
 //@Override
@@ -195,4 +188,4 @@ public class UserServiceImpl implements UserService {
 //
 //}
 
-}
+

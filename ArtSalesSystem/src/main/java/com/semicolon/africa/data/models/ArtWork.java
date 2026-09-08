@@ -24,7 +24,7 @@ public class ArtWork {
     private LocalDateTime createdDate = LocalDateTime.now();
 
     @ManyToOne
-    private User artist;
+    private User creator;
 
 
 //    @Override
