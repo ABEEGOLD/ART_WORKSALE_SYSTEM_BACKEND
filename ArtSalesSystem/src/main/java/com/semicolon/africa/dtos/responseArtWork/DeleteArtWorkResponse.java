@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class DeleteArtWorkResponse {
     private String message;
+
 }

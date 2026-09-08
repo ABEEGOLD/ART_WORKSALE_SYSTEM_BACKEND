@@ -1,5 +1,6 @@
 package com.semicolon.africa.dtos.requestArtist;
 
+import com.semicolon.africa.data.models.Role;
 import com.semicolon.africa.data.models.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,4 +12,7 @@ public class RequestArtist {
     private String bio;
     private String website;
     private String profileImageUrl;
+    private Role role;
+
+
 }

@@ -46,7 +46,13 @@ public class ArtistServiceImpl implements ArtistService{
 
     @Override
     public RespondArtist getArtistById(Long id) {
-        return null;
+        Artist artist = artistRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Artist not found with id: " + id));
+
+        RespondArtist response = new RespondArtist();
+        response.setMessage("Artist found");
+        response.setArtist(artist);
+        return response;
     }
 
     @Override
