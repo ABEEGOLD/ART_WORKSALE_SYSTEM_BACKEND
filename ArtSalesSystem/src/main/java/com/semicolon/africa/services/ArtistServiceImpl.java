@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ArtistServiceImpl implements ArtistService{
@@ -57,7 +58,16 @@ public class ArtistServiceImpl implements ArtistService{
 
     @Override
     public List<RespondArtist> getAllArtists() {
-        return List.of();
+        List<Artist> artists = artistRepository.findAll();
+
+        return artists.stream()
+                .map(artist -> {
+                    RespondArtist response = new RespondArtist();
+                    response.setMessage("Artist found successfully");
+                    response.setArtist(artist);
+                    return response;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
